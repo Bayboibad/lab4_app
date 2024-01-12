@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 class TextForm extends StatelessWidget {
   final TextEditingController controller;
   final String title;
-  const TextForm({super.key, required this.controller, required this.title});
+  final Icon icon;
+  const TextForm({super.key, required this.controller, required this.title, required this.icon});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.email_outlined),
+        prefixIcon: icon,
         border: OutlineInputBorder(),
         hintText: title,
       ),

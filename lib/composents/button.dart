@@ -11,7 +11,7 @@ class ButtonElv extends StatelessWidget {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: StyleColors.colorBackgroud,
-        fixedSize: Size(MediaQuery.of(context).size.width*1, 45)
+        fixedSize: Size(MediaQuery.of(context).size.width*1, 50)
       ),
       onPressed: onTap,
        child: Text(title, style: TextStyle(color: StyleColors.colorWhite, fontSize:18),));

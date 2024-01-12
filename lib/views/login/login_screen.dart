@@ -6,8 +6,10 @@ import 'package:lab4_app/composents/text_form.dart';
 import 'package:lab4_app/configs/images.dart';
 import 'package:lab4_app/configs/string.dart';
 import 'package:lab4_app/provider/provider_password.dart';
-import 'package:lab4_app/views/home_page.dart';
+import 'package:lab4_app/views/home/home_page.dart';
+import 'package:lab4_app/views/home/tabbottom/bloc/tabbottom_bloc.dart';
 import 'package:lab4_app/views/login/bloc/login_bloc.dart';
+import 'package:lab4_app/views/logup/logup_screen.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
@@ -54,6 +56,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: TextForm(
                       controller: emailController,
                       title: StyleTitiles.titleEmail,
+                      icon: Icon(Icons.email_outlined),
                     ),
                   ),
                   Container(
@@ -86,8 +89,15 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Container(
                     alignment: Alignment.bottomRight,
-                    child:
-                        TextBtn(onTap: () {}, title: StyleTitiles.titleLogup),
+                    child: TextBtn(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LogupPage(),
+                              ));
+                        },
+                        title: StyleTitiles.titleLogup),
                   )
                 ],
               ),
@@ -95,16 +105,17 @@ class _LoginPageState extends State<LoginPage> {
           );
         },
         listener: (context, state) {
-          if (state is SumitLogin) {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => HomePgae(),
-                ));
-          } else if (state is ErrorLogin) {
+          if (state is ErrorLogin) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.error)),
             );
+          } else if (state is SumitLogin) {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePage(),
+                ));
+            context.read<TabbottomBloc>().add(TabBottom(index: 0));
           }
         },
       ),
