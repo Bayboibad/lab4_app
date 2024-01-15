@@ -2,9 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lab4_app/api/api_product.dart';
+import 'package:lab4_app/api/firebase_store.dart';
 import 'package:lab4_app/configs/colors.dart';
 import 'package:lab4_app/firebase_options.dart';
 import 'package:lab4_app/provider/provider_password.dart';
+import 'package:lab4_app/views/home/account/bloc/update_bloc.dart';
 import 'package:lab4_app/views/home/bloc/product_bloc.dart';
 import 'package:lab4_app/views/home/tabbottom/bloc/tabbottom_bloc.dart';
 import 'package:lab4_app/views/login/bloc/login_bloc.dart';
@@ -34,6 +36,9 @@ Future<void> main() async {
       ),
       BlocProvider<ProductBloc>(
         create: (context) => ProductBloc(api: ApiProduct()),
+      ),
+      BlocProvider<UpdateBloc>(
+        create: (context) => UpdateBloc(auth: FirebaseAccount()),
       )
     ],
     child: MyApp(),

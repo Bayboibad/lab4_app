@@ -19,3 +19,4 @@ class ErrorProduct extends ProductState{
   ErrorProduct({required this.error});
   List<Object> get props => [error];
 }
+

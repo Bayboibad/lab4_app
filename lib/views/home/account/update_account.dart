@@ -1,9 +1,23 @@
+
 import 'package:flutter/material.dart';
 import 'package:lab4_app/composents/button.dart';
+import 'package:lab4_app/composents/text_form.dart';
 import 'package:lab4_app/configs/string.dart';
 
-class UpdateAccount extends StatelessWidget {
-  const UpdateAccount({super.key});
+class UpdateAccount extends StatefulWidget {
+  final String username;
+  final String email;
+  UpdateAccount({super.key, required this.username, required this.email});
+
+  @override
+  State<UpdateAccount> createState() => _UpdateAccountState();
+}
+
+class _UpdateAccountState extends State<UpdateAccount> {
+  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -28,15 +42,33 @@ class UpdateAccount extends StatelessWidget {
                 flex: 6,
                 child: Container(
                   child: Column(
-                    children: [],
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(
+                            left: 0, top: 32, right: 0, bottom: 4),
+                        child: TextForm(
+                          controller: usernameController,
+                          title: widget.username,
+                          icon: Icon(Icons.account_circle),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(
+                            left: 0, top: 8, right: 0, bottom: 4),
+                        child: TextForm(
+                          controller: emailController,
+                          title: widget.email,
+                          icon: Icon(Icons.email_outlined),
+                        ),
+                      ),
+                    ],
                   ),
                 )),
             Expanded(
                 flex: 2,
                 child: Container(
                   alignment: Alignment.topCenter,
-                  child:
-                      ButtonElv(onTap: () {}, title: StyleTitiles.update),
+                  child: ButtonElv(onTap: () {}, title: StyleTitiles.update),
                 ))
           ],
         ),

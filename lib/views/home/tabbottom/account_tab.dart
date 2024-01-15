@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lab4_app/composents/button.dart';
@@ -6,14 +8,40 @@ import 'package:lab4_app/views/home/account/update_account.dart';
 import 'package:lab4_app/views/login/login_screen.dart';
 import 'package:lab4_app/views/logup/bloc/logup_bloc.dart';
 
-class AccountTab extends StatelessWidget {
+class AccountTab extends StatefulWidget {
   const AccountTab({super.key});
+
+  @override
+  State<AccountTab> createState() => _AccountTabState();
+}
+
+class _AccountTabState extends State<AccountTab> {
+   late String username;
+   late String email;
+  final userId = FirebaseFirestore.instance
+      .collection("user")
+      .doc(FirebaseAuth.instance.currentUser!.uid);
+
+  @override
+  void initState() {
+    super.initState();
+    userId.snapshots().listen((event) {
+      if (event.exists) {
+        final data = event.data() as Map<String, dynamic>;
+        setState(() {
+          username = data['username'];
+          email = data['email'];
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(StyleTitiles.accountApp),
+        automaticallyImplyLeading: false,
       ),
       body: BlocConsumer<LogupBloc, LogupState>(
         builder: (context, state) {
@@ -53,7 +81,10 @@ class AccountTab extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => UpdateAccount(),
+                                  builder: (context) => UpdateAccount(
+                                    username: username,
+                                    email: email,
+                                  ),
                                 ));
                           },
                           child: ItemAcount(StyleTitiles.updateAccountApp),

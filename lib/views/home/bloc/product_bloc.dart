@@ -24,5 +24,14 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
        emit(ErrorProduct(error: "Lỗi thật rồi"));
       }
     });
+
+    on<SearchItem>((event, emit) async {
+           if (event.search.isEmpty) {
+            emit(LoadingProduct()); 
+           }else {
+         var list = await api.getDataProducts(100);
+        emit(SubmitProduct(list: list));
+      }
+    });
   }
 }

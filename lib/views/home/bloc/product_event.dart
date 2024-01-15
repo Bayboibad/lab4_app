@@ -8,3 +8,9 @@ class CountEvent extends ProductEvent {
   CountEvent({required this.count});
   List<Object> get props => [count];
 }
+
+class SearchItem extends ProductEvent {
+  final String search;
+  SearchItem({required this.search});
+  List<Object> get props => [search];
+}
