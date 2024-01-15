@@ -6,7 +6,7 @@ import 'package:lab4_app/models/users.dart';
 
 class FirebaseAccount {
   final CollectionReference user =
-  FirebaseFirestore.instance.collection("user");
+      FirebaseFirestore.instance.collection("user");
 
   Future<UserModel> getUser(String userId) async {
     try {
@@ -23,12 +23,12 @@ class FirebaseAccount {
   }
 
   final CollectionReference store =
-  FirebaseFirestore.instance.collection("favorite");
+      FirebaseFirestore.instance.collection("favorite");
 
   Future<String> getData(String id) async {
     try {
       DocumentSnapshot snapshot =
-      await FirebaseFirestore.instance.collection("user").doc(id).get();
+          await FirebaseFirestore.instance.collection("user").doc(id).get();
       Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
       return jsonEncode(data);
     } catch (e) {
@@ -48,18 +48,14 @@ class FirebaseAccount {
 
   Future<List<Fav>> getTym(String userId) async {
     try {
-      QuerySnapshot<
-          Map<String, dynamic>> querySnapshot = await FirebaseFirestore
-          .instance
-          .collection('favorite')
-          .where("userId", isEqualTo: userId)
-          .get();
-
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection('favorite')
+              .where("userId", isEqualTo: userId)
+              .get();
       List<Fav> favList = [];
-      List<
-          QueryDocumentSnapshot<Map<String, dynamic>>> documents = querySnapshot
-          .docs;
-
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
+          querySnapshot.docs;
       for (var document in documents) {
         favList.add(Fav.fromDocument(document));
       }
@@ -70,13 +66,13 @@ class FirebaseAccount {
       throw Exception(e);
     }
   }
+
   Future<void> deleteLoveData(String id) async {
     try {
       await store.doc(id).delete();
       print("Love data deleted successfully");
     } catch (e) {
-      throw("Error deleting love data: $e");
+      throw ("Error deleting love data: $e");
     }
   }
 }
-
