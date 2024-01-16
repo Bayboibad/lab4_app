@@ -53,7 +53,11 @@ class _FavouriteTabState extends State<FavouriteTab> {
           return Container(
             width: MediaQuery.of(context).size.width * 1,
             height: MediaQuery.of(context).size.height * 0.13,
-            child: _itemFav(proId),
+            child: _itemFav(
+              proId: proId,
+              index: index,
+              list: listFav,
+            ),
           );
         },
       ),
@@ -61,58 +65,86 @@ class _FavouriteTabState extends State<FavouriteTab> {
   }
 }
 
-Widget _itemFav(int id) {
-  return BlocBuilder<ProductBloc, ProductState>(
-    builder: (context, state) {
-      if (state is LoadingProduct) {
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      } else if (state is SubmitProduct) {
+class _itemFav extends StatefulWidget {
+  final int proId;
+  final List<Fav> list;
+  final int index;
+  const _itemFav({super.key, required this.proId, required this.list, required this.index});
+
+  @override
+  State<_itemFav> createState() => __itemFavState();
+}
+
+class __itemFavState extends State<_itemFav> {
+  late int id;
+  @override
+  void initState() {
+    super.initState();
+    getId();
+  }
+
+  void getId() {
+    setState(() {
+      id = widget.proId;
+      print("xóa : ${id}");
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ProductBloc, ProductState>(
+      builder: (context, state) {
+        if (state is SubmitProduct) {
+          return Container(
+            child: ListView.builder(
+              itemCount: state.list.length,
+              itemBuilder: (context, index) {
+                final data = state.list[index];
+                if (id != data.id) {
+                  return Container();
+                } else {
+                  return Container(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LayoutItem(
+                                  title: data.title,
+                                  price: data.price,
+                                  brand: data.brand,
+                                  description: data.description,
+                                  thumbnail: data.thumbnail,
+                                  images: data.images),
+                            ));
+                      },
+                      child: ItemFav(
+                          id: data.id,
+                          title: data.title,
+                          price: data.price,
+                          images: data.thumbnail,
+                          context: context,
+                          onTap: () {
+                            context
+                                .read<UpdateBloc>()
+                                .add(ButtonFav(id: data.id.toString()));
+                            setState(() {
+                              state.list.removeAt(index);
+                              print("xóa thành công");
+                            });
+
+                          }),
+                    ),
+                  );
+                }
+              },
+            ),
+          );
+        }
         return Container(
-          child: ListView.builder(
-            itemCount: state.list.length,
-            itemBuilder: (context, index) {
-              final data = state.list[index];
-              if (id == data.id) {
-                return Container(
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => LayoutItem(
-                                title: data.title,
-                                price: data.price,
-                                brand: data.brand,
-                                description: data.description,
-                                thumbnail: data.thumbnail,
-                                images: data.images),
-                          ));
-                    },
-                    child: ItemFav(
-                        id: data.id,
-                        title: data.title,
-                        price: data.price,
-                        images: data.thumbnail,
-                        context: context,
-                        onTap: () {
-                          context
-                              .read<UpdateBloc>()
-                              .add(ButtonFav(id: data.id.toString()));
-                        }),
-                  ),
-                );
-              } else {
-                return Container();
-              }
-            },
-          ),
+          child: Text("hhaha"),
         );
-      }
-      return Container(
-        child: Text("hhaha"),
-      );
-    },
-  );
+      },
+    );
+  }
 }
